@@ -7,3 +7,6 @@
 # ansible
 secrets.yml
 *.retry
+
+#keypair
+keypair/
