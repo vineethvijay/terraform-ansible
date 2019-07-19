@@ -9,4 +9,7 @@ secrets.yml
 *.retry
 
 #keypair
-keypair/
+terraform/keypair/
+*.pem
+*.id_rsa
+*.id_rsa.pub
