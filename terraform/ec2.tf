@@ -25,7 +25,7 @@ resource "aws_key_pair" "auth" {
   public_key = "${file(var.public_key_path)}"
 }
 
-resource "aws_instance" "webserver" {
+resource "aws_instance" "webserver1" {
   instance_type = "t2.medium"
   tags = "${var.tags}"
   ami = "${data.aws_ami.ubuntu.id}"
@@ -51,7 +51,42 @@ resource "aws_instance" "webserver" {
     # The connection block tells our provisioner how to communicate with the resource (instance)
 
     connection {
-      host = "${aws_instance.webserver.public_ip}"
+      host = "${aws_instance.webserver1.public_ip}"
+      type = "ssh"
+      user = "ubuntu"
+      port = "22"
+      private_key = "${file("~/.ssh/id_rsa")}"
+    }
+  }
+}
+
+resource "aws_instance" "webserver2" {
+  instance_type = "t2.medium"
+  tags = "${var.tags}"
+  ami = "${data.aws_ami.ubuntu.id}"
+
+  # The name of our SSH keypair
+  key_name = "${var.key_name}"
+
+  # Our Security group to allow HTTP and SSH access
+  vpc_security_group_ids = ["${aws_security_group.default.id}"]
+
+  subnet_id = "${aws_subnet.default.id}"
+
+  provisioner "local-exec" {
+    command = "sleep 60 & echo waiting"
+    on_failure = "continue"
+  }
+
+  # force Terraform to wait until a connection can be made, so that Ansible doesn't fail when trying to provision
+  provisioner "remote-exec" {
+    # The connection will use the local SSH agent for authentication
+    inline = ["echo Successfully connected"]
+
+    # The connection block tells our provisioner how to communicate with the resource (instance)
+
+    connection {
+      host = "${aws_instance.webserver2.public_ip}"
       type = "ssh"
       user = "ubuntu"
       port = "22"
