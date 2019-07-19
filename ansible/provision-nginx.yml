@@ -1,0 +1,24 @@
+---
+
+- name: Install nginx
+  apt:
+    name: nginx
+    update_cache: true
+  become: true
+
+- name: clean default config
+  file:
+    state: absent
+    path: "/etc/nginx/sites-enabled/default"
+  become: true
+
+- name: copy nginx config
+  copy:
+    src: files/nginx-proxy.conf
+    dest: /etc/nginx/conf.d/nginx-proxy.conf
+    mode: 0755
+  become: true
+
+- name: reload nginx
+  command: /usr/bin/env nginx -s reload
+  become: true

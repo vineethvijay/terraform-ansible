@@ -9,7 +9,7 @@ variable "key_name" {
 variable "tags" {
   type = "map"
   default = {
-    Repo = "https://github.com/startup-systems/terraform-ansible-example"
     Terraform = true
+    Name = "Tomcat_nginx - terraform+ansible"
   }
 }
