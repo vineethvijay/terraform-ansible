@@ -1,0 +1,21 @@
+---
+- hosts: webserver
+  name: configuration play
+  user: ubuntu
+  gather_facts: false
+
+  pre_tasks:
+    - name: Install python for Ansible
+      become: true
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: false
+
+    - setup: # aka gather_facts
+
+  tasks:
+
+    - name: Include tomcat
+      include_tasks: provision-tomcat.yml
+
+    - name: Include nginx
+      include_tasks: provision-nginx.yml

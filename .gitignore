@@ -1,0 +1,15 @@
+# terraform
+.terraform/
+*.tfstate*
+*.tfstate.backup
+*.tfvars
+
+# ansible
+secrets.yml
+*.retry
+
+#keypair
+terraform/keypair/
+*.pem
+*.id_rsa
+*.id_rsa.pub
